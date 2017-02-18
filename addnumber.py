@@ -24,8 +24,8 @@ NUMBER_FILE_TYPE = '.png'		# file type for the number image files
 NUMBER_FILES_PATH = ''  		# default path for the number image files (default is current directory)
 
 # if the debug flag is on, display debug messages
-def debug(programName, displayText):
-	if printDebugMessages:
+def debug(programName, printMessages, displayText):
+	if printMessages:
 		print programName + ':', displayText
 	return
 
@@ -42,14 +42,13 @@ def debug(programName, displayText):
 #     error number (0 = success, non-zero = failure)
 #     message corresponding with error number
 #
-def addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, widthOffset):
+def addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, widthOffset, progName = 'addNumberToImage', printDebugMessages = False):
 
 	# if debugging is turned on, display the input parameters
-	debug(progName, 'image file: ' + str(sourceFile))
-	debug(progName, 'image number: ' + str(imageNumber))
-	debug(progName, 'path to number image files: ' + numberFilesPath)
-	debug(progName, 'height offset: ' + str(heightOffset))
-	debug(progName, 'width offset: ' + str(widthOffset))
+	debug(progName, printDebugMessages, 'image file: ' + str(sourceFile))
+	debug(progName, printDebugMessages, 'image number: ' + str(imageNumber))
+	debug(progName, printDebugMessages, 'path to number image files: ' + numberFilesPath)
+	debug(progName, printDebugMessages, 'width offset: ' + str(widthOffset))
 
 	# make sure the source image file exists before proceeding
 	if not os.path.exists(sourceFile):
@@ -58,7 +57,7 @@ def addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, wid
 
 	# make sure the number file exists before proceeding
 	numberFile = numberFilesPath + str(imageNumber) + NUMBER_FILE_TYPE
-	debug(progName, 'number file: ' + numberFile)
+	debug(progName, printDebugMessages, 'number file: ' + numberFile)
 	if not os.path.exists(numberFile):
 		errorMessage = 'number file ' + numberFile + ' does not exist'
 		return FAILURE, errorMessage
@@ -71,41 +70,41 @@ def addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, wid
 	
 	# add the file type to file name
 	outputFile = outputFile + OUTPUT_FILETYPE 
-	debug(progName, 'output file: ' + outputFile)
+	debug(progName, printDebugMessages, 'output file: ' + outputFile)
 
 	# open the source image file
-	debug(progName, 'opening source file: ' + sourceFile)
+	debug(progName, printDebugMessages, 'opening source file: ' + sourceFile)
 	sourceImage = Image.open(sourceFile)
 
 	# extract the size of source file
 	sourceWidth, sourceHeight = sourceImage.size
-	debug(progName, 'source file size is ' + str(sourceWidth) + ' x ' + str(sourceHeight))
+	debug(progName, printDebugMessages, 'source file size is ' + str(sourceWidth) + ' x ' + str(sourceHeight))
 
 	# open the file containing the number to overlay on the source file
-	debug(progName, 'opening number file: ' + numberFile)
+	debug(progName, printDebugMessages, 'opening number file: ' + numberFile)
 	numberImage = Image.open(numberFile)
 	numberWidth, numberHeight = numberImage.size
-	debug(progName, 'number file size is ' + str(numberWidth) + ' x ' + str(numberHeight))
+	debug(progName, printDebugMessages, 'number file size is ' + str(numberWidth) + ' x ' + str(numberHeight))
 
 	# calculate the coordinates where the number will be pasted on the source file
 	pasteWidth = sourceWidth - numberWidth
 	pasteHeight = 0
 	pasteLocation = (pasteWidth - widthOffset, heightOffset)
-	debug(progName, 'paste location for number on source image is ' + str(pasteLocation))
+	debug(progName, printDebugMessages, 'paste location for number on source image is ' + str(pasteLocation))
 
 	# make a copy of the source image
-	debug(progName, 'making copy of source image')
+	debug(progName, printDebugMessages, 'making copy of source image')
 	outputImage = sourceImage.copy()
-	debug(progName, 'source image copied')
+	debug(progName, printDebugMessages, 'source image copied')
 
 	# paste the number on top of the copy of the source image
 	outputImage.paste(numberImage, pasteLocation, numberImage)
-	debug(progName, 'number pasted on image')
+	debug(progName, printDebugMessages, 'number pasted on image')
 
 	# save a copy to disk of the image with the number
-	debug(progName, 'saving ' + outputFile)
+	debug(progName, printDebugMessages, 'saving ' + outputFile)
 	outputImage.save(outputFile)
-	debug(progName, 'new image saved')
+	debug(progName, printDebugMessages, 'new image saved')
 
 	# return a success return code and message
 	errorMessage = outputFile + ' created'
@@ -130,17 +129,17 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	# extract the parameters from the parser
-	progName = parser.prog.rsplit( ".", 1 )[ 0 ]	# name of this program without the .py
+	pName = parser.prog.rsplit( ".", 1 )[ 0 ]	# name of this program without the .py
 	sFile = args.imagefile							# file name of the source file
 	iNumber = args.imageNumber 						# number to overlay on the source image
 	hOffset = args.heightOffset 					# offset in pixels from top to overlay number
 	wOffset = args.widthOffset 						# offset from right side to overlay number
 	nFilesPath = args.numberFilesPath 				# path where number images are stored
-	printDebugMessages = args.debugSwitch 			# if true debug messages will be displayed
+	pdMessages = args.debugSwitch		 			# if true debug messages will be displayed
 	silentMode = args.silentMode 					# do not display normal messages if true
 
 	# overlay the number on the source file image and save the resulting file
-	errCode, errMessage = addNumberToImage(sFile, iNumber, nFilesPath, hOffset, wOffset)
+	errCode, errMessage = addNumberToImage(sFile, iNumber, nFilesPath, hOffset, wOffset, progName = pName, printDebugMessages = pdMessages)
 
 	# print messages and exit with the return code
 	if not silentMode:
