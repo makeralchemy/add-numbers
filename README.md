@@ -29,7 +29,7 @@
 #### Command Line Examples
 Create a new image by adding the number 5 to *testimage.jpg*. The new file will be called *testimage-005.png* and will be stored in the same directory as *testimage.jpg*. Number files are in the current directory. Default offsets for placement of the number will be used.
 
-    $ python addnumber.py -n 5 testimage.JPG
+    $ python addnumber.py -n 5 testimage.jpg
 
 Create a new image by adding the number 8 to *testimage.jpg*. The new file will be called *testimage-008.png* and will be stored in the same directory as *testimage.jpg*. Number files are in the current directory. Default offsets for placement of the number will be used.
 
