@@ -12,7 +12,7 @@
 ### Command Line Usage:
     addnumber [options] IMAGEFILE
 
-    IMAGEFILE  filename of the source image to be numbered
+    IMAGEFILE  filename of the source image to be numbered. File name is case insensitive.
 
     Options:
          -n number, --number number        Number to add to image [required].
@@ -31,13 +31,13 @@ Create a new image by adding the number 5 to *testimage.jpg*. The new file will 
 
     $ python addnumber.py -n 5 testimage.jpg
 
-Create a new image by adding the number 8 to *testimage.jpg*. The new file will be called *testimage-005.png* and will be stored in the same directory as *testimage.jpg*. Number files are in the current directory. Default offsets for placement of the number will be used.
+Create a new image by adding the number 8 to *testimage.jpg*. The new file will be called *testimage-008.png* and will be stored in the same directory as *testimage.jpg*. Number files are in the current directory. Default offsets for placement of the number will be used.
 
     $ python addnumber.py -n 8 /path/to/my/project/testimage.jpg
 
-Create a new image by adding the number 12 to *testimage.jpg*. Offset the image by 40 pixels from the top and 45 pixels from right edge.  The numbered image will be called *testimage-012.png* and will be stored in the same directory as *testimage.jpg*. Number files are in the current directory.
+Create a new image by adding the number 12 to *testimage.jpg*. Offset the image by 120 pixels from the top and 145 pixels from right edge.  The numbered image will be called *testimage-012.png* and will be stored in the same directory as *testimage.jpg*. Number files are in the current directory.
 
-    $ python addnumber.py -n 12 -y 40 -x 45 testimage.jpg
+    $ python addnumber.py -n 12 -y 120 -x 145 testimage.jpg
 
 Create a new image by adding the number 35 to *testimage.jpg*. Number files are stored in /path/to/number/files. The numbered image will be called *testimage-035.jpg* and will be stored in the same directory as *testimage.jpg*. Default offsets for placement of the number will be used.
 
