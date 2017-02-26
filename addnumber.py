@@ -17,7 +17,7 @@ WIDTH_OFFSET = 35				# default offset from right for overlaying number image
 MIN_IMAGE_NUMBER = 1			# minimum number that can be added to the source image
 MAX_IMAGE_NUMBER = 40			# maximum number that can be added to the source image
 
-OUTPUT_FILETYPE = '.png'		# file type for the output image file
+OUTPUT_FILETYPE = '.jpg'		# file type for the output image file
 OUTPUT_NUM_SEPARATOR = '-'		# separate to be used in the output file name (e.g., "foo-025")
 
 NUMBER_FILE_TYPE = '.png'		# file type for the number image files
