@@ -56,7 +56,7 @@ def addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, wid
 		return FAILURE, errorMessage
 
 	# make sure the number file exists before proceeding
-	numberFile = numberFilesPath + str(imageNumber) + NUMBER_FILE_TYPE
+	numberFile = os.path.join(numberFilesPath, str(imageNumber) + NUMBER_FILE_TYPE)
 	debug(progName, printDebugMessages, 'number file: ' + numberFile)
 	if not os.path.exists(numberFile):
 		errorMessage = 'number file ' + numberFile + ' does not exist'
@@ -131,10 +131,12 @@ if __name__ == "__main__":
 	# extract the parameters from the parser
 	pName = parser.prog.rsplit( ".", 1 )[ 0 ]	# name of this program without the .py
 	sFile = args.imagefile							# file name of the source file
+	sFile = os.path.normpath(sFile) 				# convert path using '/' to the correct form for this system
 	iNumber = args.imageNumber 						# number to overlay on the source image
 	hOffset = args.heightOffset 					# offset in pixels from top to overlay number
 	wOffset = args.widthOffset 						# offset from right side to overlay number
 	nFilesPath = args.numberFilesPath 				# path where number images are stored
+		
 	pdMessages = args.debugSwitch		 			# if true debug messages will be displayed
 	silentMode = args.silentMode 					# do not display normal messages if true
 
@@ -145,6 +147,3 @@ if __name__ == "__main__":
 	if not silentMode:
 		print errMessage
 	sys.exit(errCode)
-
-
-
