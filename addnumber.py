@@ -50,6 +50,11 @@ def addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, wid
 	debug(progName, printDebugMessages, 'path to number image files: ' + numberFilesPath)
 	debug(progName, printDebugMessages, 'width offset: ' + str(widthOffset))
 
+	# make sure the image number is in the proper range
+	if (imageNumber < MIN_IMAGE_NUMBER) or (imageNumber > MAX_IMAGE_NUMBER):
+		errorMessage = 'image number must be ' + str(MIN_IMAGE_NUMBER) + ' to ' + str(MAX_IMAGE_NUMBER)
+		return FAILURE, errorMessage
+
 	# make sure the source image file exists before proceeding
 	if not os.path.exists(sourceFile):
 		errorMessage = 'source file ' + sourceFile + ' does not exist'
@@ -120,7 +125,7 @@ if __name__ == "__main__":
 	# parse the arguments to the addnumber command
 	parser = argparse.ArgumentParser(description='Image Numbering Program')
 	parser.add_argument('imagefile',  help='name of file to be numbered')
-	parser.add_argument('-n', '--number', dest='imageNumber', type=int, required=True, choices=range(MIN_IMAGE_NUMBER, MAX_IMAGE_NUMBER+1), help='number to add to the image')
+	parser.add_argument('-n', '--number', dest='imageNumber', type=int, required=True, help='number to add to the image')
 	parser.add_argument('-y', '--heightoffset', dest='heightOffset', default=HEIGHT_OFFSET, type=int, help=widthHelp)
 	parser.add_argument('-x', '--widthoffset', dest='widthOffset', default=WIDTH_OFFSET, type=int, help=heightHelp)
 	parser.add_argument('-d', '--debug', dest='debugSwitch', action='store_true', help='if specified, display debugging messages')
@@ -136,7 +141,6 @@ if __name__ == "__main__":
 	hOffset = args.heightOffset 					# offset in pixels from top to overlay number
 	wOffset = args.widthOffset 						# offset from right side to overlay number
 	nFilesPath = args.numberFilesPath 				# path where number images are stored
-		
 	pdMessages = args.debugSwitch		 			# if true debug messages will be displayed
 	silentMode = args.silentMode 					# do not display normal messages if true
 

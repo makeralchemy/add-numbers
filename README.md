@@ -62,6 +62,10 @@ If the number image file is not found, *addnumber.py* will display an error mess
 
 and return 1 for the error code.
 
+If the number to be added to the image is not in the proper range, *addnumber.py* will display the message:
+
+    image number must be 1 to 40
+
 ### Python usage:
 #### Syntax
     addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, widthOffset)
