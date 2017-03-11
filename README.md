@@ -10,26 +10,42 @@
 *addnumber.py* can be executed from the command line or as a function imported by another python program.
 
 ### Command Line Usage:
-    addnumber [options] IMAGEFILE
 
-    IMAGEFILE  filename of the source image to be numbered. File name is case insensitive.
+    usage: addnumber.py [-h] -n IMAGENUMBER [-y HEIGHTOFFSET] [-x WIDTHOFFSET]
+                        [-d] [-s] [-l] [-p NUMBERFILESPATH]
+                        imagefile
 
-    Options:
-         -n number, --number number        Number to add to image [required].
-                                           Numbers can be from 1 to 40.
-         -y offset, --heightoffset offset  Pixels to offset number from top edge [optional] 
-                                           Default is 35 pixels. 
-         -x offset, --widthoffset offset   Pixels to offset number from right edge. [optional] 
-                                           Default is 35 pixels. [optional]
-         -d,        --debug                Display debugging messages [optional]
-         -s,        --silent               Do not display normal messages [optional]
-         -p path,   --path path            Path to image files location [optional] 
-                                           Default is the current path.       
+    Image Numbering Program
+
+    positional arguments:
+      imagefile             name of file to be numbered
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -n IMAGENUMBER, --number IMAGENUMBER
+                            number to add to the image
+      -y HEIGHTOFFSET, --heightoffset HEIGHTOFFSET
+                            number of pixels from the top to offset the number;
+                            default is 35
+      -x WIDTHOFFSET, --widthoffset WIDTHOFFSET
+                            number of pixels from the right to offset the number;
+                            default is 35
+      -d, --debug           if specified, display debugging messages
+      -s, --silent          if specified, do not display normal messages
+      -l, --leading         if specified, put file number before file name
+      -p NUMBERFILESPATH, --path NUMBERFILESPATH
+                            path to the number image files; defaults to current
+                            directory
+     
     
 #### Command Line Examples
 Create a new image by adding the number 5 to *testimage.jpg*. The new file will be called *testimage-005.jpg* and will be stored in the same directory as *testimage.jpg*. Number files are in the current directory. Default offsets for placement of the number will be used.
 
     $ python addnumber.py -n 5 testimage.jpg
+
+Create a new image by adding the number 5 to *testimage.jpg*. The new file will be called *005-testimage.jpg* and will be stored in the same directory as *testimage.jpg*. Number files are in the current directory. Default offsets for placement of the number will be used.
+
+    $ python addnumber.py -n 5 -l testimage.jpg
 
 Create a new image by adding the number 8 to *testimage.jpg*. The new file will be called *testimage-008.jpg* and will be stored in the same directory as *testimage.jpg*. Number files are in the current directory. Default offsets for placement of the number will be used.
 
@@ -68,7 +84,7 @@ If the number to be added to the image is not in the proper range, *addnumber.py
 
 ### Python usage:
 #### Syntax
-    addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, widthOffset)
+    addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, widthOffset, prefixFileNum)
 
     sourceFile             string with the name of the source file.
     imageNumber            integer of the number to be overlayed on the image.
@@ -77,11 +93,17 @@ If the number to be added to the image is not in the proper range, *addnumber.py
     widthOffset            integer of the number of pixels from the right edge to offet the number.
     progName =             string to be used as the program name in debug messages
     printDebugMessages =   boolean indicating whether to display debug messages
+    prefixFileNum          boolean if true the file name will be preceeded with the file number; if false the file name will be appended with the file number
 #### Examples
 Create a new image by adding the number 5 to *testimage.jpg* in the current directory. The new file will be called *testimage-005.jpg* and will be stored in the same directory as *testimage.jpg*. Offset the number by 35 pixels from the top and 35 pixels from the right. Number files are in the current directory.
 
     import addnumber
     errCode, errMessage = addnumber.addNumberToImage('testimage.jpg', 5, '', 35, 35)
+
+Create a new image by adding the number 5 to *testimage.jpg* in the current directory. The new file will be called *005-testimage.jpg* and will be stored in the same directory as *testimage.jpg*. Offset the number by 35 pixels from the top and 35 pixels from the right. Number files are in the current directory.
+
+    import addnumber
+    errCode, errMessage = addnumber.addNumberToImage('testimage.jpg', 5, '', 35, 35, prefixFileNum = True)
 
 Create a new image by adding the number 8 to *testimage.jpg* in the directory */path/to/my/project*. The new file will be called *testimage-005.jpg* and will be stored in the same directory as *testimage.jpg*. Offset the number by 35 pixels from the top and 35 pixels from the right. Number files are in the current directory.
 

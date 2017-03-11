@@ -42,13 +42,14 @@ def debug(programName, printMessages, displayText):
 #     error number (0 = success, non-zero = failure)
 #     message corresponding with error number
 #
-def addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, widthOffset, progName = 'addNumberToImage', printDebugMessages = False):
+def addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, widthOffset, progName = 'addNumberToImage', printDebugMessages = False, prefixFileNum = False):
 
 	# if debugging is turned on, display the input parameters
 	debug(progName, printDebugMessages, 'image file: ' + str(sourceFile))
 	debug(progName, printDebugMessages, 'image number: ' + str(imageNumber))
 	debug(progName, printDebugMessages, 'path to number image files: ' + numberFilesPath)
 	debug(progName, printDebugMessages, 'width offset: ' + str(widthOffset))
+	debug(progName, printDebugMessages, 'prefix file number: ' + str(prefixFileNum))
 
 	# make sure the image number is in the proper range
 	if (imageNumber < MIN_IMAGE_NUMBER) or (imageNumber > MAX_IMAGE_NUMBER):
@@ -70,8 +71,12 @@ def addNumberToImage(sourceFile, imageNumber, numberFilesPath, heightOffset, wid
 	# construct the output file name:  the file will be stored in the same path as the source file
 	outputFile = os.path.join(os.path.dirname(sourceFile), os.path.basename(sourceFile).rsplit('.', 1)[ 0 ])
 	
-	# add a separator and the number to the file name
-	outputFile = outputFile + OUTPUT_NUM_SEPARATOR + str(imageNumber).zfill(3)
+	if prefixFileNum:
+		# prefix the file name with the file number and separator (nnn-filename)
+		outputFile = str(imageNumber).zfill(3) + OUTPUT_NUM_SEPARATOR + outputFile
+	else:
+		# suffix the file name with the separator and file name (filename-nnn)
+		outputFile = outputFile + OUTPUT_NUM_SEPARATOR + str(imageNumber).zfill(3)
 	
 	# add the file type to file name
 	outputFile = outputFile + OUTPUT_FILETYPE 
@@ -130,6 +135,7 @@ if __name__ == "__main__":
 	parser.add_argument('-x', '--widthoffset', dest='widthOffset', default=WIDTH_OFFSET, type=int, help=heightHelp)
 	parser.add_argument('-d', '--debug', dest='debugSwitch', action='store_true', help='if specified, display debugging messages')
 	parser.add_argument('-s', '--silent', dest='silentMode', action='store_true', help='if specified, do not display normal messages')
+	parser.add_argument('-l', '--leading', dest='leadingSwitch', action='store_true', help='if specified, put file number before file name')
 	parser.add_argument('-p', '--path', dest='numberFilesPath', default=NUMBER_FILES_PATH, help='path to the number image files; defaults to current directory')
 	args = parser.parse_args()
 
@@ -143,9 +149,10 @@ if __name__ == "__main__":
 	nFilesPath = args.numberFilesPath 				# path where number images are stored
 	pdMessages = args.debugSwitch		 			# if true debug messages will be displayed
 	silentMode = args.silentMode 					# do not display normal messages if true
+	leadingNum = args.leadingSwitch					# prefix file name with file number
 
 	# overlay the number on the source file image and save the resulting file
-	errCode, errMessage = addNumberToImage(sFile, iNumber, nFilesPath, hOffset, wOffset, progName = pName, printDebugMessages = pdMessages)
+	errCode, errMessage = addNumberToImage(sFile, iNumber, nFilesPath, hOffset, wOffset, progName = pName, printDebugMessages = pdMessages, prefixFileNum = leadingNum)
 
 	# print messages and exit with the return code
 	if not silentMode:
